@@ -125,13 +125,15 @@ class TestAccountService(TestCase):
 
     # ADD YOUR TEST CASES HERE ...
 
-    def test_read_an_account(self):
-        """Read: It should Read an Account"""
+    def test_get_account(self):
+        """It should Read a single Account"""
         account = self._create_accounts(1)[0]
-        response = self.client.get(f"{BASE_URL}/{account.id}")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Check data is correct
-        read_account = response.get_json()
+        resp = self.client.get(
+            f"{BASE_URL}/{account.id}", content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(data["name"], account.name)
 
     def test_update_account(self):
         """It should Update an existing Account"""
